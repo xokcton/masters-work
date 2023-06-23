@@ -1,0 +1,13 @@
+.vscode
+__pycache__
+venv
+
+images
+output
+
+yolov3.weights
+
+*.jpg
+*.jpeg
+*.gif
+*.png
