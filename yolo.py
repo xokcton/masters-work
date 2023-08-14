@@ -3,11 +3,13 @@ import numpy as np
 
 
 class Yolo:
-    def __init__(self, classes):
+    def __init__(self, classes, cfg_path, weights_path):
         self.classes = classes
-        self.yolo = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+        self.yolo = cv2.dnn.readNet(cfg_path, weights_path)
 
     def detect(self, input_image, output_image):
+        COLORS = np.random.randint(0, 255, size=(
+            len(self.classes), 3), dtype="uint8")
         layer_names = self.yolo.getLayerNames()
         output_layers = [layer_names[i - 1]
                          for i in self.yolo.getUnconnectedOutLayers()]
@@ -51,10 +53,11 @@ class Yolo:
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
         for i in range(len(boxes)):
             if i in indexes:
+                color = [int(c) for c in COLORS[class_ids[i]]]
                 x, y, w, h = boxes[i]
                 label = str(self.classes[class_ids[i]])
-                cv2.rectangle(img, (x, y), (x + w, y + h), greenColor, 3)
-                cv2.putText(img, label, (x, y + 10),
-                            cv2.FONT_HERSHEY_PLAIN, 8, redColor, 8)
+                cv2.rectangle(img, (x, y), (x + w, y + h), color, 3)
+                cv2.putText(img, label, (x, y - 5),
+                            cv2.FONT_HERSHEY_PLAIN, 2, redColor, 2)
 
         cv2.imwrite(output_image, img)

@@ -5,7 +5,7 @@ venv
 images
 output
 
-yolov3.weights
+*.weights
 
 *.jpg
 *.jpeg

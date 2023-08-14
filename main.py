@@ -1,14 +1,20 @@
 from yolo import Yolo
 from images import Images
 
+import os
+
 
 def main():
-    classes = []
+    cfg_path = os.path.join('.', 'model', 'cfg', 'yolov3-spp.cfg')
+    weights_path = os.path.join('.', 'model', 'weights', 'yolov3-spp.weights')
+    coco_names = os.path.join('.', 'model', 'coco.names')
     output_folder = 'output'
-    with open("coco.names", "r") as file:
+    classes = []
+
+    with open(coco_names, "r") as file:
         classes = [line.strip() for line in file.readlines()]
 
-    y = Yolo(classes=classes)
+    y = Yolo(classes=classes, cfg_path=cfg_path, weights_path=weights_path)
     i = Images('images', output_folder)
     imgs = i.get_images()
 
